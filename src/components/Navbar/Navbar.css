@@ -1,0 +1,27 @@
+.nav-container{
+    display: flex;
+    padding:0 80px ;
+    justify-content: space-between;
+     background-color: rgb(184, 204, 207);
+    
+}
+
+.nav-text{
+    text-decoration: none;
+    color: Black;
+}
+
+.nav-text:hover{
+    color: white;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .nav-container{
+        display: flex;
+        padding:0 15px ;
+        justify-content: space-between;
+        background-color: rgb(184, 204, 207);
+        
+    }
+  }

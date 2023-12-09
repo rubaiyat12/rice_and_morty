@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Card.module.scss";
 import CardDetails from "./CardDetails";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+
 
 const Card = ({ page, results }) => {
   let display;
@@ -27,6 +30,9 @@ const Card = ({ page, results }) => {
                 <div className="fs-6 fw-normal">Last Location</div>
                 <div className="fs-5">{location.name}</div>
               </div>
+              <button className='fav-btn' >
+                     <FontAwesomeIcon  icon={faHeart} />
+                </button>
             </div>
           </div>
 

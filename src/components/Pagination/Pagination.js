@@ -1,56 +1,80 @@
-import React, { useState, useEffect } from "react";
-import ReactPaginate from "react-paginate";
+import React, { useState, useEffect } from 'react';
+import './Pagination.css';
+const Pagination = ({ info, pageNumber, updatePageNumber }) => {
+  const totalPages = info?.pages;
+  const [currentPage, setCurrentPage] = useState(pageNumber);
+  const [displayedPages, setDisplayedPages] = useState([]);
 
-const Pagination = ({ pageNumber, info, updatePageNumber }) => {
-  let pageChange = (data) => {
-    updatePageNumber(data.selected + 1);
-  };
-
-  const [width, setWidth] = useState(window.innerWidth);
-  const updateDimensions = () => {
-    setWidth(window.innerWidth);
-  };
   useEffect(() => {
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+      
+      const range = calculatePageRange(currentPage, totalPages);
+
+     
+      setDisplayedPages(range);
+  }, [currentPage, totalPages]);
+
+  const calculatePageRange = (currentPage, totalPages) => {
+      const rangeSize = 8; 
+      const halfRange = Math.floor(rangeSize / 2);
+
+      let start = Math.max(1, currentPage - halfRange);
+      let end = Math.min(totalPages, start + rangeSize - 1);
+
+      if (end - start + 1 < rangeSize) {
+          start = Math.max(1, end - rangeSize + 1);
+      }
+
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
+  const handlePageChange = (newPage) => {
+      updatePageNumber(newPage);
+      setCurrentPage(newPage);
+  };
 
   return (
-    <>
-      <style jsx>
-        {`
-          @media (max-width: 768px) {
-            .pagination {
-              font-size: 12px;
-            }
-            .next,
-            .prev {
-              display: none;
-            }
-          }
-          @media (max-width: 768px) {
-            .pagination {
-              font-size: 14px;
-            }
-          }
-        `}
-      </style>
-      <ReactPaginate
-        className="pagination justify-content-center my-4 gap-4"
-        nextLabel="Next"
-        forcePage={pageNumber === 1 ? 0 : pageNumber - 1}
-        previousLabel="Prev"
-        previousClassName="btn btn-primary fs-5 prev"
-        nextClassName="btn btn-primary fs-5 next"
-        activeClassName="active"
-        marginPagesDisplayed={width < 576 ? 1 : 2}
-        pageRangeDisplayed={width < 576 ? 1 : 2}
-        pageCount={info?.pages}
-        onPageChange={pageChange}
-        pageClassName="page-item"
-        pageLinkClassName="page-link"
-      />
-    </>
+      <div className="pagination-section section-container">
+          <div>
+              <button
+                  className='color-btn'
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+              >
+                  &lt;
+              </button>
+
+              {
+                  currentPage>=6&&
+                  <button className='side-btn'>---</button>
+              }
+
+              {
+              
+              displayedPages.map((page) => (
+                  <button
+                      key={page}
+                      className={page === currentPage ? 'color-btn' : ''}
+                      onClick={() => handlePageChange(page)}
+                  >
+                      {page}
+                  </button>
+              ))}
+{
+                  currentPage<=38&&
+                  <button className='side-btn'>---</button>
+              }
+
+
+
+              <button
+                  className="color-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+              >
+                  &gt;
+              </button>
+          </div>
+      </div>
   );
 };
 
